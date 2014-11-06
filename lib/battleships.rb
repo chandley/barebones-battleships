@@ -54,7 +54,8 @@ class Board
 end
 
 class Player
-  attr_reader :board
+  attr_reader :board, :name
+  attr_accessor :opponent
   def initialize(name)
     @name = name
     @board = Board.new
@@ -74,17 +75,41 @@ class Player
   end
 
   def take_a_shot
-    puts "enter shot coordinates (x,y)"
+    puts "Player #{name}, please enter shot coordinates (x,y)"
     coordinates = gets.chomp.split(',').to_enum
     x , y = coordinates.next.to_i, coordinates.next.to_i
-    @board.shoot(x,y)
+    opponent.board.shoot(x,y)
+  end
+
+  def show_boards
+    puts "#{name}'s board"
+    board.show
+    puts "#{name}'s enemy tracking board"
+    opponent.board.show(true)
   end
 end
 
-chris = Player.new("Chris")
-until chris.board.lost? do
-  chris.take_a_shot
-  chris.board.show
+class Game
+  def initialize
+    player1 = Player.new("Adam")
+    player2 = Player.new("Brenda")
+    player1.opponent = player2
+    player2.opponent = player1
+    @current_player = player1
+  end
+
+  def play
+    loop do
+      @current_player.take_a_shot
+      @current_player.show_boards
+      break if @current_player.opponent.board.lost?
+      @current_player = @current_player.opponent
+    end
+    puts "#{@current_player.name} won. Yay!"
+  end
+
 end
-puts "you lost!"
+
+my_game = Game.new
+my_game.play
 
