@@ -1,9 +1,11 @@
-# SHIPS = {'battleship' => 5, 'cruiser' => 3}
-SHIPS = {'torpedo_boat' => 2}
+# SHIPS = {'battleship' => 5, 'cruiser' => 4, 'destroyer => 3'}
+SHIPS = { 'torpedo_boat' => 2 }
+SIZE = 10
 
-class Cell < Struct.new(:ship,:hit)
 
-  def display(tracking = false)
+class Cell < Struct.new( :ship , :hit )
+
+  def display( tracking = false )
     case true
     when ship && hit
       'X'
@@ -22,11 +24,11 @@ end
 class Board
   def initialize
     @cells = []
-    100.times {@cells << Cell.new}
+    (SIZE**2).times {@cells << Cell.new}
   end
 
   def rows
-    @cells.each_slice(10).to_a
+    @cells.each_slice(SIZE).to_a
   end
 
   def cols
@@ -34,7 +36,7 @@ class Board
   end
 
    def place_ship(start_x,start_y,length,direction = rows)
-     direction[start_x][start_y,length].each {|cell| cell.ship = true}
+     direction[start_x][start_y, length].each {|cell| cell.ship = true}
    end
 
   def show(tracking = false)
@@ -70,7 +72,7 @@ class Player
       x , y = coordinates.next.to_i, coordinates.next.to_i
       puts "across? (y,n)?"
       direction = gets.chomp.downcase == 'y' ? @board.rows : @board.cols
-      @board.place_ship(x,y,length,direction)
+      @board.place_ship(x,y,length,direction) # need to swap coordinates if using cols
     end
   end
 
