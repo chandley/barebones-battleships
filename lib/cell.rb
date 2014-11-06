@@ -34,15 +34,32 @@ class Board
      direction[start_x][start_y,length].each {|cell| cell.ship = true}
    end
 
-  def show
+  def show(tracking = false)
     rows.each do |row|
-      row.each {|cell| print cell.display}
+      row.each {|cell| print cell.display(tracking)}
       puts
     end
+  end
+
+  def shoot(x,y)
+    rows[x][y].hit = true
+  end
+
+  def lost?
+    cells.map{|cell| cell.display}.select{|cell| cell == 'S'}.size == 0 ? true : false
   end
 end
 
 my_board = Board.new
 my_board.place_ship(2,2,2,my_board.cols)
 my_board.show
+my_board.shoot(2,2)
+my_board.shoot(3,2)
+my_board.show
+puts "lost" if my_board.lost?
+
+my_board.shoot(3,3)
+my_board.show
+puts "lost" if my_board.lost?
+
 
