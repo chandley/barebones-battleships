@@ -1,4 +1,5 @@
-SHIPS = {'battleship' => 5, 'cruiser' => 3}
+# SHIPS = {'battleship' => 5, 'cruiser' => 3}
+SHIPS = {'torpedo_boat' => 2}
 
 class Cell < Struct.new(:ship,:hit)
 
@@ -16,7 +17,6 @@ class Cell < Struct.new(:ship,:hit)
       '?'
     end
   end
-
 end
 
 class Board
@@ -54,6 +54,7 @@ class Board
 end
 
 class Player
+  attr_reader :board
   def initialize(name)
     @name = name
     @board = Board.new
@@ -69,7 +70,6 @@ class Player
       puts "across? (y,n)?"
       direction = gets.chomp.downcase == 'y' ? @board.rows : @board.cols
       @board.place_ship(x,y,length,direction)
-      @board.show
     end
   end
 
@@ -78,22 +78,13 @@ class Player
     coordinates = gets.chomp.split(',').to_enum
     x , y = coordinates.next.to_i, coordinates.next.to_i
     @board.shoot(x,y)
-    @board.show
-    return @board.lost?
   end
 end
 
 chris = Player.new("Chris")
-chris.take_a_shot
-
-# my_board = Board.new
-# my_board.place_ship(2,2,2,my_board.cols)
-# my_board.show
-# puts 'lost' if my_board.lost?
-# my_board.shoot(2,2)
-# my_board.shoot(3,2)
-# my_board.show
-# puts 'lost' if my_board.lost?
-
-
+until chris.board.lost? do
+  chris.take_a_shot
+  chris.board.show
+end
+puts "you lost!"
 
