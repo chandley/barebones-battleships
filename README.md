@@ -12,6 +12,7 @@ Key simplifications are
 
 * The opponents tracking view of your board is your view with some information removed
 * You don't need to keep track of the ships after they are placed, you just need to count the number of unhit ship cells. When this reaches zero on your board, you lose. This makes the ships look like data, rather than a class.
-* Having the data organised by rows and columns simplifies the placing of the ship, and the display.
+* Keep grid references all numerical, then an array is enough structure for the cell grid
+* Organising cells by rows and columns simplifies the handling of the grid (placing of the ship, shooting and the display)
 * Easiest to place ships when initializing board
 
