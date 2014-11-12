@@ -36,7 +36,13 @@ class Board
   end
 
    def place_ship(start_x,start_y,length,direction = rows)
-     direction[start_x][start_y, length].each {|cell| cell.ship = true}
+
+     direction[start_x][start_y, length].each do |cell|
+      # rescue raise "Invalid coordinates"
+       # raise "Invalid coordinates" if cell.is_nil?
+       raise "Already placed ship there" if cell.ship
+       cell.ship = true
+     end
    end
 
   def show(tracking = false)
@@ -47,6 +53,8 @@ class Board
   end
 
   def shoot(x,y)
+    # raise "Invalid coordinates" if rows[x][y].is_nil?
+    raise "Already shot there" if rows[x][y].hit
     rows[x][y].hit = true
   end
 
@@ -66,9 +74,12 @@ class Player
 
   def place_all_ships
     SHIPS.each do |ship, length| 
+
+      # show ship name, length, get x,y direction from user
+
       puts "Player #{@name}, please place your #{ship}, size #{length}"
       puts "enter start coordinates (x,y)"
-      coordinates = gets.chomp.split(',').to_enum
+      coordinates = gets.chomp.split(',').to_enum # this is probably a bad way to do this
       x , y = coordinates.next.to_i, coordinates.next.to_i
       puts "across? (y,n)?"
       direction = gets.chomp.downcase == 'y' ? @board.rows : @board.cols
@@ -77,6 +88,9 @@ class Player
   end
 
   def take_a_shot
+    # get shot x,y from user
+
+
     puts "Player #{name}, please enter shot coordinates (x,y)"
     coordinates = gets.chomp.split(',').to_enum
     x , y = coordinates.next.to_i, coordinates.next.to_i
@@ -84,6 +98,7 @@ class Player
   end
 
   def show_boards
+    # do this in HTML
     puts "#{name}'s board"
     board.show
     puts "#{name}'s enemy tracking board"
