@@ -52,6 +52,13 @@ class Board
     end
   end
 
+  def show_data(tracking = false)
+    display_array = rows.map do |row|
+      row.map {|cell| cell.display(tracking)}
+    end
+    return display_array
+  end
+
   def shoot(x,y)
     # raise "Invalid coordinates" if rows[x][y].is_nil?
     raise "Already shot there" if rows[x][y].hit
